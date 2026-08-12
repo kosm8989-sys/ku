@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -21,8 +20,8 @@
 <body class="bg-slate-100 text-slate-800 min-h-screen">
 
   <!-- 상단 네비게이션 헤더 -->
-  <header class="bg-slate-900 text-white shadow-lg sticky top-0 z-50 no-print">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-2">
+  <header class="bg-slate-900 text-white shadow-lg sticky top-0 z-50 no-print border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-extrabold text-xl shadow">
           <i class="fa-solid fa-truck-monster"></i>
@@ -32,13 +31,45 @@
           <p class="text-xs text-slate-400">산업안전보건기준에 관한 규칙 제163조 및 중량물 작업 가이드라인 연동</p>
         </div>
       </div>
-      <div class="flex gap-2">
-        <button onclick="window.print()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-4 py-2 rounded-lg text-sm transition flex items-center gap-2 shadow">
-          <i class="fa-solid fa-print"></i> 검토서 출력 / PDF 저장
+      
+      <!-- 상단 메뉴 및 액션 버튼 -->
+      <div class="flex items-center gap-2 flex-wrap">
+        <!-- 외부링크 메뉴 연결 버튼 -->
+        <a href="https://ku-tau.vercel.app/crane.html" target="_blank" rel="noopener noreferrer" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3.5 py-2 rounded-lg text-sm transition flex items-center gap-2 shadow border border-indigo-500">
+          <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+          <span>이동식크레인검토</span>
+        </a>
+        <button onclick="window.print()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-3.5 py-2 rounded-lg text-sm transition flex items-center gap-2 shadow">
+          <i class="fa-solid fa-print"></i>
+          <span>검토서 출력 / PDF</span>
         </button>
       </div>
     </div>
   </header>
+
+  <!-- 서브 메뉴 네비게이션 바 -->
+  <nav class="bg-slate-800 border-b border-slate-700 text-slate-200 text-xs no-print">
+    <div class="max-w-7xl mx-auto px-4 flex items-center gap-1 overflow-x-auto py-2">
+      <span class="text-slate-400 font-semibold px-2 py-1">빠른 메뉴:</span>
+      <a href="#section-cargo" class="hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-1">
+        <i class="fa-solid fa-clipboard-list text-blue-400"></i> 1. 기본 화물정보
+      </a>
+      <a href="#section-shackle" class="hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-1">
+        <i class="fa-solid fa-link text-indigo-400"></i> 2. 샤클 검토
+      </a>
+      <a href="#section-rigging" class="hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-1">
+        <i class="fa-solid fa-ribbon text-emerald-400"></i> 3. 줄걸이 검토
+      </a>
+      <a href="#section-crane" class="hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-1">
+        <i class="fa-solid fa-truck-pickup text-amber-400"></i> 4. 크레인 양중검토
+      </a>
+      <div class="h-4 w-[1px] bg-slate-700 mx-1"></div>
+      <!-- 외부 웹페이지 바로가기 메뉴 -->
+      <a href="https://ku-tau.vercel.app/crane.html" target="_blank" rel="noopener noreferrer" class="bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1">
+        <i class="fa-solid fa-calculator text-amber-400"></i> 이동식크레인검토 외부시스템 ↗
+      </a>
+    </div>
+  </nav>
 
   <main class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
 
@@ -46,9 +77,11 @@
     <div class="lg:col-span-7 space-y-6 no-print">
 
       <!-- 1. 기본 작업 및 화물 정보 -->
-      <section class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
-        <h2 class="text-base font-bold text-slate-900 border-b pb-3 mb-4 flex items-center gap-2">
-          <i class="fa-solid fa-clipboard-list text-blue-600"></i> 1. 기본 작업 및 인양 화물 정보
+      <section id="section-cargo" class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
+        <h2 class="text-base font-bold text-slate-900 border-b pb-3 mb-4 flex items-center justify-between">
+          <span class="flex items-center gap-2">
+            <i class="fa-solid fa-clipboard-list text-blue-600"></i> 1. 기본 작업 및 인양 화물 정보
+          </span>
         </h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
@@ -71,7 +104,7 @@
       </section>
 
       <!-- 2. 샤클(Shackle) 안전성 검토 -->
-      <section class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
+      <section id="section-shackle" class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
         <h2 class="text-base font-bold text-slate-900 border-b pb-3 mb-4 flex items-center gap-2">
           <i class="fa-solid fa-link text-indigo-600"></i> 2. 샤클(Shackle) 안전성 검토
         </h2>
@@ -93,7 +126,7 @@
       </section>
 
       <!-- 3. 줄걸이 용구 검토 (슬링벨트 or 와이어로프) -->
-      <section class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
+      <section id="section-rigging" class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
         <div class="flex justify-between items-center border-b pb-3 mb-4">
           <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
             <i class="fa-solid fa-ribbon text-emerald-600"></i> 3. 줄걸이 용구 안전성 검토
@@ -204,10 +237,18 @@
       </section>
 
       <!-- 4. 이동식 크레인 정격하중 검토 -->
-      <section class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
-        <h2 class="text-base font-bold text-slate-900 border-b pb-3 mb-4 flex items-center gap-2">
-          <i class="fa-solid fa-truck-pickup text-amber-600"></i> 4. 크레인 정격하중 및 양중 능력 검토
-        </h2>
+      <section id="section-crane" class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
+        <div class="flex justify-between items-center border-b pb-3 mb-4">
+          <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-truck-pickup text-amber-600"></i> 4. 크레인 정격하중 및 양중 능력 검토
+          </h2>
+          <!-- 크레인외부검토 메뉴 링크 -->
+          <a href="https://ku-tau.vercel.app/crane.html" target="_blank" rel="noopener noreferrer" class="text-xs bg-slate-100 hover:bg-slate-200 text-indigo-600 px-2.5 py-1 rounded border border-indigo-200 font-bold flex items-center gap-1 transition">
+            <span>이동식크레인검토</span>
+            <i class="fa-solid fa-external-link text-[10px]"></i>
+          </a>
+        </div>
+
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
           <div>
             <label class="block text-xs font-semibold text-slate-600 mb-1">크레인 장비 모델</label>
@@ -243,6 +284,24 @@
 
     <!-- 우측: 실시간 종합 안전성 검토 보고서 및 판정 카드 (5 Columns) -->
     <div class="lg:col-span-5 space-y-6">
+
+      <!-- 외부 시스템 이동식크레인검토 배너 카드 -->
+      <a href="https://ku-tau.vercel.app/crane.html" target="_blank" rel="noopener noreferrer" class="block p-4 rounded-xl bg-gradient-to-r from-indigo-900 to-slate-900 text-white shadow-md border border-indigo-700/60 hover:border-amber-400 transition group no-print">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold text-lg group-hover:bg-amber-500 group-hover:text-slate-950 transition">
+              <i class="fa-solid fa-calculator"></i>
+            </div>
+            <div>
+              <h3 class="text-sm font-bold flex items-center gap-1.5 text-amber-300">
+                이동식크레인검토 모듈 바로가기
+                <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition"></i>
+              </h3>
+              <p class="text-[11px] text-slate-300">https://ku-tau.vercel.app/crane.html 외부 웹 연결</p>
+            </div>
+          </div>
+        </div>
+      </a>
 
       <!-- 종합 판정 상태 카드 -->
       <div id="statusCard" class="p-6 rounded-xl shadow-lg border text-white transition-all duration-300 bg-slate-800 border-slate-700">
