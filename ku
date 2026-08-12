@@ -1,1 +1,793 @@
 
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>위험성평가 스마트 관리자 시스템</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Noto Sans KR) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            body {
+                background: white;
+                color: black;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 flex flex-col min-h-screen">
+
+    <!-- 상단 헤더 / 네비게이션 (no-print) -->
+    <header class="bg-slate-900 text-white shadow-md sticky top-0 z-50 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- 로고 -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('home')">
+                    <div class="bg-amber-500 text-slate-900 p-2 rounded-lg font-bold text-xl flex items-center justify-center w-10 h-10">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <span class="font-bold text-lg tracking-wide">세이프티Guard <span class="text-xs text-amber-400 font-normal">위험성평가 시스템</span></span>
+                </div>
+
+                <!-- 데스크탑 메뉴 -->
+                <nav class="hidden md:flex space-x-1">
+                    <button id="nav-home" onclick="switchTab('home')" class="nav-btn px-4 py-2 rounded-md text-sm font-medium hover:bg-slate-800 text-amber-400 transition-colors">
+                        <i class="fa-solid fa-house mr-1.5"></i> 홈
+                    </button>
+                    <button id="nav-auto" onclick="switchTab('auto')" class="nav-btn px-4 py-2 rounded-md text-sm font-medium hover:bg-slate-800 text-slate-300 transition-colors">
+                        <i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i> 위험성평가 자동화 (AI)
+                    </button>
+                    <button id="nav-board" onclick="switchTab('board')" class="nav-btn px-4 py-2 rounded-md text-sm font-medium hover:bg-slate-800 text-slate-300 transition-colors">
+                        <i class="fa-solid fa-clipboard-list mr-1.5"></i> 게시판 & 자료실
+                    </button>
+                </nav>
+
+                <!-- 사용자 상태/알림 -->
+                <div class="flex items-center space-x-3 text-sm">
+                    <span class="bg-slate-800 text-slate-300 px-3 py-1 rounded-full border border-slate-700 hidden sm:inline-block">
+                        <i class="fa-solid fa-user-gear text-amber-400 mr-1"></i> 관리자(안전보건)
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 모바일 네비게이션 바 -->
+        <div class="md:hidden border-t border-slate-800 flex justify-around py-2 bg-slate-900">
+            <button onclick="switchTab('home')" class="text-xs text-center flex-1 py-1 text-amber-400">
+                <i class="fa-solid fa-house block text-base mb-0.5"></i> 홈
+            </button>
+            <button onclick="switchTab('auto')" class="text-xs text-center flex-1 py-1 text-slate-400">
+                <i class="fa-solid fa-wand-magic-sparkles block text-base mb-0.5"></i> AI 자동화
+            </button>
+            <button onclick="switchTab('board')" class="text-xs text-center flex-1 py-1 text-slate-400">
+                <i class="fa-solid fa-clipboard-list block text-base mb-0.5"></i> 게시판
+            </button>
+        </div>
+    </header>
+
+    <!-- 메인 컨텐츠 영역 -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- ================= PAGE 1: 홈 (대시보드) ================= -->
+        <section id="page-home" class="space-y-6">
+            <!-- 배너 -->
+            <div class="bg-gradient-to-r from-slate-800 to-indigo-950 rounded-2xl p-6 sm:p-8 text-white shadow-xl flex flex-col md:flex-row items-center justify-between">
+                <div class="space-y-3 max-w-2xl">
+                    <span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs px-3 py-1 rounded-full font-medium">산업안전보건법 제36조 준수</span>
+                    <h1 class="text-2xl sm:text-3xl font-bold leading-tight">스마트 위험성평가로 사업장의 안전을 지키세요</h1>
+                    <p class="text-slate-300 text-sm sm:text-base">Gemini AI 기술을 활용하여 작업별 위험요인을 자동 분석하고 개선대책을 수립할 수 있습니다.</p>
+                    <div class="pt-2">
+                        <button onclick="switchTab('auto')" class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-5 py-2.5 rounded-lg text-sm transition shadow-lg flex items-center space-x-2">
+                            <i class="fa-solid fa-bolt"></i>
+                            <span>AI 위험성평가 작성 시작하기</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-6 md:mt-0 text-7xl text-amber-400/80 hidden lg:block">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+            </div>
+
+            <!-- 요약 카드 4종 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase">누적 위험성평가</p>
+                        <p class="text-2xl font-bold text-slate-800 mt-1">128건</p>
+                        <p class="text-xs text-emerald-600 mt-1"><i class="fa-solid fa-arrow-up"></i> 이번달 +14건</p>
+                    </div>
+                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-file-contract"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase">고위험(III등급 이상)</p>
+                        <p class="text-2xl font-bold text-rose-600 mt-1">3건</p>
+                        <p class="text-xs text-rose-500 mt-1"><i class="fa-solid fa-circle-exclamation"></i> 즉시 조치 필요</p>
+                    </div>
+                    <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-lg flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase">개선 조치 완료율</p>
+                        <p class="text-2xl font-bold text-emerald-600 mt-1">94.2%</p>
+                        <p class="text-xs text-slate-400 mt-1">목표: 90% 이상</p>
+                    </div>
+                    <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase">정기평가 수립 예정</p>
+                        <p class="text-2xl font-bold text-amber-600 mt-1">D-15</p>
+                        <p class="text-xs text-slate-400 mt-1">2026년 하반기 정기평가</p>
+                    </div>
+                    <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-lg flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 대시보드 하단 (최근 작성 + 공지사항 요약) -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- 최근 평가 실시 현황 -->
+                <div class="lg:col-span-2 bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-slate-800 text-base flex items-center">
+                            <i class="fa-solid fa-clock-rotate-left text-indigo-600 mr-2"></i> 최근 실시된 위험성평가
+                        </h3>
+                        <button onclick="switchTab('board')" class="text-xs text-indigo-600 hover:underline">전체보기</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left text-slate-600">
+                            <thead class="text-xs text-slate-700 uppercase bg-slate-50 border-b">
+                                <tr>
+                                    <th class="px-4 py-3">작업명 / 공정</th>
+                                    <th class="px-4 py-3">평가일자</th>
+                                    <th class="px-4 py-3">위험도</th>
+                                    <th class="px-4 py-3">상태</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-4 py-3 font-medium text-slate-900">고소작업대 활용 외벽 도장 작업</td>
+                                    <td class="px-4 py-3">2026.08.10</td>
+                                    <td class="px-4 py-3"><span class="bg-red-100 text-red-800 text-xs px-2 py-0.5 rounded font-semibold">높음(상)</span></td>
+                                    <td class="px-4 py-3"><span class="text-emerald-600 font-medium">개선완료</span></td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-4 py-3 font-medium text-slate-900">밀폐공간(저수조) 내부 청소 작업</td>
+                                    <td class="px-4 py-3">2026.08.08</td>
+                                    <td class="px-4 py-3"><span class="bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded font-semibold">중간(중)</span></td>
+                                    <td class="px-4 py-3"><span class="text-amber-600 font-medium">조치중</span></td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-4 py-3 font-medium text-slate-900">지게차 자재 운반 및 적재 작업</td>
+                                    <td class="px-4 py-3">2026.08.05</td>
+                                    <td class="px-4 py-3"><span class="bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded font-semibold">중간(중)</span></td>
+                                    <td class="px-4 py-3"><span class="text-emerald-600 font-medium">개선완료</span></td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-4 py-3 font-medium text-slate-900">사무실 문서 수거 및 배쇄 작업</td>
+                                    <td class="px-4 py-3">2026.08.01</td>
+                                    <td class="px-4 py-3"><span class="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded font-semibold">낮음(하)</span></td>
+                                    <td class="px-4 py-3"><span class="text-emerald-600 font-medium">개선완료</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 안전보건 공지사항 요약 -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-bold text-slate-800 text-base flex items-center">
+                                <i class="fa-solid fa-bullhorn text-amber-500 mr-2"></i> 안전보건 공지사항
+                            </h3>
+                            <button onclick="switchTab('board')" class="text-xs text-indigo-600 hover:underline">더보기</button>
+                        </div>
+                        <ul class="space-y-3 text-sm">
+                            <li class="border-b border-slate-100 pb-2">
+                                <a href="#" class="hover:text-indigo-600 flex justify-between items-center">
+                                    <span class="truncate max-w-[200px]">하절기 온열질환 예방가이드 배포</span>
+                                    <span class="text-xs text-slate-400">08.11</span>
+                                </a>
+                            </li>
+                            <li class="border-b border-slate-100 pb-2">
+                                <a href="#" class="hover:text-indigo-600 flex justify-between items-center">
+                                    <span class="truncate max-w-[200px]">2026년 정기 위험성평가 교육 안내</span>
+                                    <span class="text-xs text-slate-400">08.02</span>
+                                </a>
+                            </li>
+                            <li class="border-b border-slate-100 pb-2">
+                                <a href="#" class="hover:text-indigo-600 flex justify-between items-center">
+                                    <span class="truncate max-w-[200px]">밀폐공간 특별 안전점검 실시</span>
+                                    <span class="text-xs text-slate-400">07.28</span>
+                                </a>
+                            </li>
+                            <li class="pb-1">
+                                <a href="#" class="hover:text-indigo-600 flex justify-between items-center">
+                                    <span class="truncate max-w-[200px]">신규 안전보건 관리규정 개정안</span>
+                                    <span class="text-xs text-slate-400">07.15</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-6 bg-slate-50 p-3 rounded-lg border border-slate-100 text-xs text-slate-600">
+                        <i class="fa-solid fa-circle-info text-blue-500 mr-1"></i>
+                        매월 첫째 주 월요일은 <strong>전사 안전점검의 날</strong>입니다.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 2: 위험성평가 자동화 (Gemini AI) ================= -->
+        <section id="page-auto" class="hidden space-y-6">
+            <!-- 안내 상자 -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm no-print">
+                <div class="flex items-start space-x-4">
+                    <div class="p-3 bg-amber-100 text-amber-700 rounded-lg text-xl">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-800">AI 기반 위험성평가표 자동 생성</h2>
+                        <p class="text-sm text-slate-600 mt-1">
+                            평가 대상 작업명과 작업 내용을 간단히 입력하면, Gemini AI가 **유해·위험요인**, **현재 안전조치**, **위험성 수준**, **감소대책**을 자동으로 작성해 드립니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 입력 폼 -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4 no-print">
+                <h3 class="text-base font-bold text-slate-800 border-b pb-2">작업 정보 입력</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">작업명 / 공정명 <span class="text-red-500">*</span></label>
+                        <input type="text" id="input-task" placeholder="예: 지게차를 이용한 상하차 작업, 용접 작업 등" 
+                               class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">평가 구문 및 기구</label>
+                        <input type="text" id="input-tools" placeholder="예: 3톤 지게차, 안전모, 안전대 등" 
+                               class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">세부 작업 내용 및 작업 환경 <span class="text-red-500">*</span></label>
+                    <textarea id="input-detail" rows="3" placeholder="작업 장소, 작업 절차, 관련 작업자 인원 및 조건 등을 자유롭게 기재하세요." 
+                              class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"></textarea>
+                </div>
+                
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="resetAutoForm()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-medium transition">
+                        초기화
+                    </button>
+                    <button type="button" id="btn-generate" onclick="generateAssessment()" class="px-5 py-2 bg-amber-500 hover:bg-amber-600 text-slate-900 rounded-lg text-sm font-bold transition flex items-center space-x-2 shadow">
+                        <i class="fa-solid fa-sparkles"></i>
+                        <span>AI 분석 및 위험성평가표 작성</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 로딩 표시기 -->
+            <div id="loading-spinner" class="hidden bg-white p-12 rounded-xl border border-slate-200 text-center space-y-4">
+                <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-amber-500 border-t-transparent"></div>
+                <p class="text-sm font-medium text-slate-700">Gemini AI가 위험요인을 분석하고 안전대책을 수립 중입니다...</p>
+                <p class="text-xs text-slate-400">잠시만 기다려 주세요 (약 3~5초 소요)</p>
+            </div>
+
+            <!-- 평가 결과 및 양식 표 -->
+            <div id="result-container" class="hidden bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                <div class="flex justify-between items-center border-b pb-3 no-print">
+                    <h3 class="text-base font-bold text-slate-800 flex items-center">
+                        <i class="fa-solid fa-file-shield text-emerald-600 mr-2"></i> 위험성평가표 결과물
+                    </h3>
+                    <div class="flex space-x-2">
+                        <button onclick="window.print()" class="px-3 py-1.5 bg-slate-800 text-white rounded text-xs font-medium hover:bg-slate-700">
+                            <i class="fa-solid fa-print mr-1"></i> 인쇄 / PDF 저장
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 인쇄 가능 문서 영역 -->
+                <div id="printable-area" class="space-y-4 text-slate-900">
+                    <div class="text-center py-2">
+                        <h2 class="text-2xl font-extrabold underline decoration-2 underline-offset-4">위 험 성 평 가 표</h2>
+                    </div>
+
+                    <!-- 개요 정보 표 -->
+                    <table class="w-full border-collapse border border-slate-400 text-xs text-center">
+                        <tr>
+                            <th class="border border-slate-400 bg-slate-100 p-2 w-1/6 font-bold">작업명</th>
+                            <td class="border border-slate-400 p-2 w-2/6 text-left" id="res-task-name">-</td>
+                            <th class="border border-slate-400 bg-slate-100 p-2 w-1/6 font-bold">평가일자</th>
+                            <td class="border border-slate-400 p-2 w-2/6" id="res-date">-</td>
+                        </tr>
+                        <tr>
+                            <th class="border border-slate-400 bg-slate-100 p-2 font-bold">사용 기구/장비</th>
+                            <td class="border border-slate-400 p-2 text-left" id="res-tools">-</td>
+                            <th class="border border-slate-400 bg-slate-100 p-2 font-bold">평가자</th>
+                            <td class="border border-slate-400 p-2">관리감독자 / 안전관리자</td>
+                        </tr>
+                    </table>
+
+                    <!-- 위험성평가 세부내용 표 -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse border border-slate-400 text-xs">
+                            <thead>
+                                <tr class="bg-slate-100 text-center font-bold">
+                                    <th class="border border-slate-400 p-2 w-12">NO</th>
+                                    <th class="border border-slate-400 p-2 w-1/5">세부 작업단계</th>
+                                    <th class="border border-slate-400 p-2 w-1/4">유해·위험요인 (Hazard)</th>
+                                    <th class="border border-slate-400 p-2 w-1/4">현재의 안전조치</th>
+                                    <th class="border border-slate-400 p-2 w-16">위험성<br>(빈도x강도)</th>
+                                    <th class="border border-slate-400 p-2">위험성 감소대책 (개선안)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="res-table-body">
+                                <!-- AI 생성 결과 항목 들어가는 곳 -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="text-xs text-slate-500 pt-2 flex justify-between">
+                        <span>* 빈도: 1~5점 / 강도: 1~5점 (위험도 = 빈도 x 강도, 9점 이상 개선 필요)</span>
+                        <span>세이프티Guard 스마트 평가 시스템</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 3: 게시판 및 자료실 ================= -->
+        <section id="page-board" class="hidden space-y-6">
+            <!-- 헤더 및 검색 -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-800">안전보건 게시판 & 자료실</h2>
+                    <p class="text-xs text-slate-500 mt-0.5">안전 가이드라인, 위험성평가 서식 및 공지사항을 확인하세요.</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <div class="relative">
+                        <input type="text" id="board-search" placeholder="제목, 작성자 검색..." 
+                               class="pl-9 pr-3 py-1.5 border border-slate-300 rounded-lg text-xs w-64 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                    </div>
+                    <button onclick="openBoardWriteModal()" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-medium transition">
+                        <i class="fa-solid fa-pen mr-1"></i> 글쓰기
+                    </button>
+                </div>
+            </div>
+
+            <!-- 카테고리 탭 -->
+            <div class="flex space-x-2 border-b border-slate-200 pb-2">
+                <button class="px-3 py-1.5 rounded-full bg-slate-800 text-white text-xs font-medium">전체</button>
+                <button class="px-3 py-1.5 rounded-full bg-white text-slate-600 hover:bg-slate-100 text-xs font-medium border">공지사항</button>
+                <button class="px-3 py-1.5 rounded-full bg-white text-slate-600 hover:bg-slate-100 text-xs font-medium border">위험성평가 자료</button>
+                <button class="px-3 py-1.5 rounded-full bg-white text-slate-600 hover:bg-slate-100 text-xs font-medium border">안전교육</button>
+            </div>
+
+            <!-- 게시판 목록 테이블 -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                <table class="w-full text-sm text-left text-slate-600">
+                    <thead class="text-xs text-slate-700 uppercase bg-slate-50 border-b border-slate-200">
+                        <tr>
+                            <th class="px-4 py-3 w-16 text-center">번호</th>
+                            <th class="px-4 py-3 w-28 text-center">분류</th>
+                            <th class="px-4 py-3">제목</th>
+                            <th class="px-4 py-3 w-28">작성자</th>
+                            <th class="px-4 py-3 w-28 text-center">작성일</th>
+                            <th class="px-4 py-3 w-20 text-center">조회수</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100" id="board-list">
+                        <!-- 샘플 데이터 -->
+                        <tr class="hover:bg-slate-50 cursor-pointer" onclick="viewPost('공지', '2026 하반기 정기 위험성평가 실시 안내', '안전보건팀장', '2026.08.02', '142')">
+                            <td class="px-4 py-3 text-center text-xs font-semibold text-amber-600">공지</td>
+                            <td class="px-4 py-3 text-center"><span class="bg-slate-100 text-slate-700 text-xs px-2 py-0.5 rounded">공지사항</span></td>
+                            <td class="px-4 py-3 font-medium text-slate-900 flex items-center space-x-1">
+                                <span>2026 하반기 정기 위험성평가 실시 안내</span>
+                                <i class="fa-solid fa-paperclip text-slate-400 text-xs"></i>
+                            </td>
+                            <td class="px-4 py-3 text-xs">안전보건팀장</td>
+                            <td class="px-4 py-3 text-xs text-center">2026.08.02</td>
+                            <td class="px-4 py-3 text-xs text-center">142</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 cursor-pointer" onclick="viewPost('일반', '하절기 온열질환 예방 3대 수칙 가이드라인', '보건관리자', '2026.08.11', '89')">
+                            <td class="px-4 py-3 text-center text-xs text-slate-400">3</td>
+                            <td class="px-4 py-3 text-center"><span class="bg-blue-50 text-blue-700 text-xs px-2 py-0.5 rounded">안전교육</span></td>
+                            <td class="px-4 py-3 font-medium text-slate-900">하절기 온열질환 예방 3대 수칙 가이드라인 (물, 그늘, 휴식)</td>
+                            <td class="px-4 py-3 text-xs">보건관리자</td>
+                            <td class="px-4 py-3 text-xs text-center">2026.08.11</td>
+                            <td class="px-4 py-3 text-xs text-center">89</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 cursor-pointer" onclick="viewPost('일반', '건설기계 및 지게차 작업 안전 점검표 표준양식', '안전관리자', '2026.07.25', '215')">
+                            <td class="px-4 py-3 text-center text-xs text-slate-400">2</td>
+                            <td class="px-4 py-3 text-center"><span class="bg-amber-50 text-amber-700 text-xs px-2 py-0.5 rounded">자료실</span></td>
+                            <td class="px-4 py-3 font-medium text-slate-900 flex items-center space-x-1">
+                                <span>건설기계 및 지게차 작업 안전 점검표 표준양식</span>
+                                <i class="fa-solid fa-file-excel text-emerald-600 text-xs"></i>
+                            </td>
+                            <td class="px-4 py-3 text-xs">안전관리자</td>
+                            <td class="px-4 py-3 text-xs text-center">2026.07.25</td>
+                            <td class="px-4 py-3 text-xs text-center">215</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 cursor-pointer" onclick="viewPost('일반', '밀폐공간 질식재해 예방 특별 가이드', '안전관리자', '2026.07.18', '178')">
+                            <td class="px-4 py-3 text-center text-xs text-slate-400">1</td>
+                            <td class="px-4 py-3 text-center"><span class="bg-amber-50 text-amber-700 text-xs px-2 py-0.5 rounded">자료실</span></td>
+                            <td class="px-4 py-3 font-medium text-slate-900">밀폐공간 질식재해 예방 특별 가이드 및 장비 사용법</td>
+                            <td class="px-4 py-3 text-xs">안전관리자</td>
+                            <td class="px-4 py-3 text-xs text-center">2026.07.18</td>
+                            <td class="px-4 py-3 text-xs text-center">178</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 페이지네이션 -->
+            <div class="flex justify-center space-x-1 pt-2">
+                <button class="px-3 py-1 bg-white border border-slate-300 rounded text-xs text-slate-500 hover:bg-slate-50">이전</button>
+                <button class="px-3 py-1 bg-amber-500 text-slate-900 border border-amber-500 rounded text-xs font-bold">1</button>
+                <button class="px-3 py-1 bg-white border border-slate-300 rounded text-xs text-slate-500 hover:bg-slate-50">2</button>
+                <button class="px-3 py-1 bg-white border border-slate-300 rounded text-xs text-slate-500 hover:bg-slate-50">다음</button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 하단 푸터 (no-print) -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-6 mt-12 border-t border-slate-800 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <div>
+                <p class="font-bold text-slate-200">세이프티Guard 위험성평가 관리자 시스템</p>
+                <p class="mt-1 text-slate-500">본 시스템은 산업안전보건법 제36조에 의거하여 사업장 위험성평가를 지원합니다.</p>
+            </div>
+            <div class="flex space-x-4 text-slate-400">
+                <a href="#" class="hover:text-white">개인정보처리방침</a>
+                <a href="#" class="hover:text-white">안전보건방침</a>
+                <a href="#" class="hover:text-white">안전보건센터 문의</a>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ================= MODALS ================= -->
+
+    <!-- 게시글 상세보기 모달 -->
+    <div id="modal-post" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full p-6 space-y-4">
+            <div class="flex justify-between items-start border-b pb-3">
+                <div>
+                    <span id="post-modal-badge" class="bg-slate-100 text-slate-700 text-xs px-2 py-0.5 rounded">공지사항</span>
+                    <h3 id="post-modal-title" class="text-lg font-bold text-slate-800 mt-1">게시글 제목</h3>
+                    <div class="flex items-center space-x-3 text-xs text-slate-400 mt-1">
+                        <span>작성자: <span id="post-modal-author">관리자</span></span>
+                        <span>작성일: <span id="post-modal-date">2026.00.00</span></span>
+                    </div>
+                </div>
+                <button onclick="closePostModal()" class="text-slate-400 hover:text-slate-600 text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="post-modal-content" class="text-sm text-slate-700 leading-relaxed py-2 min-h-[120px]">
+                내용이 여기에 표시됩니다.
+            </div>
+            <div class="border-t pt-3 flex justify-end">
+                <button onclick="closePostModal()" class="px-4 py-2 bg-slate-800 text-white rounded-lg text-xs font-medium">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 게시글 작성 모달 -->
+    <div id="modal-write" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-xl max-w-xl w-full p-6 space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="text-base font-bold text-slate-800">새 안전 보건 게시글 작성</h3>
+                <button onclick="closeBoardWriteModal()" class="text-slate-400 hover:text-slate-600 text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">분류</label>
+                    <select id="write-category" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-amber-500">
+                        <option>공지사항</option>
+                        <option>위험성평가 자료</option>
+                        <option>안전교육</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">제목</label>
+                    <input type="text" id="write-title" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-amber-500" placeholder="제목을 입력하세요">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">내용</label>
+                    <textarea id="write-content" rows="5" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-amber-500" placeholder="안전 가이드 및 지침 내용을 작성하세요"></textarea>
+                </div>
+            </div>
+            <div class="border-t pt-3 flex justify-end space-x-2">
+                <button onclick="closeBoardWriteModal()" class="px-4 py-2 bg-slate-100 text-slate-600 rounded-lg text-xs font-medium">취소</button>
+                <button onclick="saveNewPost()" class="px-4 py-2 bg-amber-500 text-slate-900 font-bold rounded-lg text-xs">등록하기</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================= JAVASCRIPT LOGIC ================= -->
+    <script>
+        // API KEY 설정 (실제 환경에서는 런타임 제공)
+        const apiKey = "";
+
+        // 탭 전환 핸들러
+        function switchTab(tabName) {
+            const pages = ['home', 'auto', 'board'];
+            pages.forEach(p => {
+                const el = document.getElementById(`page-${p}`);
+                const btn = document.getElementById(`nav-${p}`);
+                if (p === tabName) {
+                    el.classList.remove('hidden');
+                    if (btn) {
+                        btn.classList.add('text-amber-400');
+                        btn.classList.remove('text-slate-300');
+                    }
+                } else {
+                    el.classList.add('hidden');
+                    if (btn) {
+                        btn.classList.remove('text-amber-400');
+                        btn.classList.add('text-slate-300');
+                    }
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 지수 백오프 방식 API 호출 함수
+        async function fetchGeminiWithBackoff(url, payload) {
+            const maxRetries = 5;
+            let delay = 1000;
+
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.ok) {
+                        return await response.json();
+                    }
+                } catch (err) {
+                    // silent retry
+                }
+                await new Promise(res => setTimeout(res, delay));
+                delay *= 2; // 1s, 2s, 4s, 8s, 16s
+            }
+            throw new Error("API 요청 실패");
+        }
+
+        // 위험성평가 자동 생성 실행
+        async function generateAssessment() {
+            const task = document.getElementById('input-task').value.trim();
+            const tools = document.getElementById('input-tools').value.trim();
+            const detail = document.getElementById('input-detail').value.trim();
+
+            if (!task || !detail) {
+                alert("작업명과 세부 작업 내용을 작성해 주세요.");
+                return;
+            }
+
+            const loadingSpinner = document.getElementById('loading-spinner');
+            const resultContainer = document.getElementById('result-container');
+
+            loadingSpinner.classList.remove('hidden');
+            resultContainer.classList.add('hidden');
+
+            // 프롬프트 구성
+            const promptText = `
+                대한민국 산업안전보건법 위험성평가 지침에 근거하여 다음 작업에 대한 위험성평가표 데이터를 작성해줘.
+                
+                [작업 정보]
+                - 작업명: ${task}
+                - 사용 기구/장비: ${tools || '없음'}
+                - 세부 작업 내용: ${detail}
+
+                요청사항: 세부 작업 단계별로 3가지 이상의 유해위험요인을 분석하고 아래 JSON 형식 규격에 맞춰 응답해줘.
+            `;
+
+            // JSON Schema 구조 정의
+            const schema = {
+                type: "OBJECT",
+                properties: {
+                    assessmentList: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                step: { type: "STRING", description: "세부 작업단계" },
+                                hazard: { type: "STRING", description: "유해·위험요인" },
+                                currentAction: { type: "STRING", description: "현재의 안전조치" },
+                                frequency: { type: "INTEGER", description: "빈도 (1~5)" },
+                                severity: { type: "INTEGER", description: "강도 (1~5)" },
+                                countermeasure: { type: "STRING", description: "위험성 감소대책 (개선안)" }
+                            },
+                            required: ["step", "hazard", "currentAction", "frequency", "severity", "countermeasure"]
+                        }
+                    }
+                },
+                required: ["assessmentList"]
+            };
+
+            const payload = {
+                contents: [{ parts: [{ text: promptText }] }],
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: schema
+                }
+            };
+
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+            try {
+                const data = await fetchGeminiWithBackoff(endpoint, payload);
+                const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                
+                if (!resultText) throw new Error("결과 응답 없음");
+                
+                const parsedData = JSON.parse(resultText);
+                renderAssessmentResult(task, tools, parsedData.assessmentList);
+
+            } catch (error) {
+                console.error(error);
+                alert("위험성평가표 자동 생성 도중 오류가 발생했습니다. 다시 시도해주세요.");
+            } finally {
+                loadingSpinner.classList.add('hidden');
+            }
+        }
+
+        // 결과를 테이블로 렌더링
+        function renderAssessmentResult(task, tools, list) {
+            document.getElementById('res-task-name').innerText = task;
+            document.getElementById('res-tools').innerText = tools || '해당 없음';
+            document.getElementById('res-date').innerText = new Date().toLocaleDateString('ko-KR');
+
+            const tbody = document.getElementById('res-table-body');
+            tbody.innerHTML = '';
+
+            list.forEach((item, index) => {
+                const riskScore = item.frequency * item.severity;
+                let riskBadgeClass = 'bg-green-100 text-green-800';
+                if (riskScore >= 9) riskBadgeClass = 'bg-red-100 text-red-800 font-bold';
+                else if (riskScore >= 5) riskBadgeClass = 'bg-amber-100 text-amber-800';
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50";
+                tr.innerHTML = `
+                    <td class="border border-slate-400 p-2 text-center font-medium">${index + 1}</td>
+                    <td class="border border-slate-400 p-2 font-medium">${escapeHtml(item.step)}</td>
+                    <td class="border border-slate-400 p-2 text-slate-800">${escapeHtml(item.hazard)}</td>
+                    <td class="border border-slate-400 p-2 text-slate-600">${escapeHtml(item.currentAction)}</td>
+                    <td class="border border-slate-400 p-2 text-center">
+                        <span class="px-2 py-0.5 rounded text-xs inline-block ${riskBadgeClass}">
+                            ${riskScore}점 (${item.frequency}x${item.severity})
+                        </span>
+                    </td>
+                    <td class="border border-slate-400 p-2 text-indigo-900 font-medium">${escapeHtml(item.countermeasure)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('result-container').classList.remove('hidden');
+            document.getElementById('result-container').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetAutoForm() {
+            document.getElementById('input-task').value = '';
+            document.getElementById('input-tools').value = '';
+            document.getElementById('input-detail').value = '';
+            document.getElementById('result-container').classList.add('hidden');
+        }
+
+        // HTML 문자열 이스케이프
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/&/g, "&amp;")
+                      .replace(/</g, "&lt;")
+                      .replace(/>/g, "&gt;")
+                      .replace(/"/g, "&quot;")
+                      .replace(/'/g, "&#039;");
+        }
+
+        // ================= 게시판 관련 기능 =================
+        function viewPost(badge, title, author, date, views) {
+            document.getElementById('post-modal-badge').innerText = badge;
+            document.getElementById('post-modal-title').innerText = title;
+            document.getElementById('post-modal-author').innerText = author;
+            document.getElementById('post-modal-date').innerText = date;
+            
+            document.getElementById('post-modal-content').innerHTML = `
+                <p>본 게시글은 사업장 안전보건지침 관련 참고용 세부자료입니다.</p>
+                <br>
+                <p>• <strong>주요 준수사항:</strong> 현장 작업 전 위험요인 파악 및 TBM(작업 전 안전점검회의)을 필수적으로 진행해 주시기 바랍니다.</p>
+                <p>• <strong>첨부자료:</strong> 안전보건공단 표준 매뉴얼 참조</p>
+            `;
+            
+            document.getElementById('modal-post').classList.remove('hidden');
+        }
+
+        function closePostModal() {
+            document.getElementById('modal-post').classList.add('hidden');
+        }
+
+        function openBoardWriteModal() {
+            document.getElementById('modal-write').classList.remove('hidden');
+        }
+
+        function closeBoardWriteModal() {
+            document.getElementById('modal-write').classList.add('hidden');
+        }
+
+        function saveNewPost() {
+            const category = document.getElementById('write-category').value;
+            const title = document.getElementById('write-title').value.trim();
+            const content = document.getElementById('write-content').value.trim();
+
+            if (!title || !content) {
+                alert("제목과 내용을 모두 입력해주세요.");
+                return;
+            }
+
+            const tbody = document.getElementById('board-list');
+            const newTr = document.createElement('tr');
+            newTr.className = "hover:bg-slate-50 cursor-pointer";
+            
+            const today = new Date().toISOString().split('T')[0].replace(/-/g, '.');
+
+            newTr.onclick = function() {
+                viewPost(category, title, '관리자', today, '1');
+            };
+
+            newTr.innerHTML = `
+                <td class="px-4 py-3 text-center text-xs font-semibold text-amber-600">NEW</td>
+                <td class="px-4 py-3 text-center"><span class="bg-slate-100 text-slate-700 text-xs px-2 py-0.5 rounded">${category}</span></td>
+                <td class="px-4 py-3 font-medium text-slate-900">${escapeHtml(title)}</td>
+                <td class="px-4 py-3 text-xs">관리자</td>
+                <td class="px-4 py-3 text-xs text-center">${today}</td>
+                <td class="px-4 py-3 text-xs text-center">1</td>
+            `;
+
+            tbody.insertBefore(newTr, tbody.firstChild);
+            closeBoardWriteModal();
+            
+            document.getElementById('write-title').value = '';
+            document.getElementById('write-content').value = '';
+            alert("게시글이 성공적으로 등록되었습니다.");
+        }
+    </script>
+</body>
+</html>
+
